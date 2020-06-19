@@ -34,11 +34,15 @@ net = cv2.dnn.readNetFromCaffe(protoPath, modelPath)
 vs = cv2.VideoCapture(args["input"])
 read = 0
 saved = 0
+#clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
 
 # loop over frames from the video file stream
 while True:
 	# grab the frame from the file
 	(grabbed, frame) = vs.read()
+
+	
+	#cl1 = clahe.apply(img)
 
 	# if the frame was not grabbed, then we have reached the end
 	# of the stream
@@ -78,11 +82,15 @@ while True:
 			box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
 			(startX, startY, endX, endY) = box.astype("int")
 			face = frame[startY:endY, startX:endX]
-
+			
 			# write the frame to disk
 			p = os.path.sep.join([args["output"],
 				"{}.png".format(saved)])
-			cv2.imwrite(p, face)
+			try:
+				cv2.imwrite(p, face)
+			except:
+				print("Frame",saved,"com defeito")
+			
 			saved += 1
 			print("[INFO] saved {} to disk".format(p))
 

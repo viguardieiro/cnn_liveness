@@ -37,7 +37,7 @@ args = vars(ap.parse_args())
 # epochs to train for
 INIT_LR = 1e-4
 BS = 8
-EPOCHS = 50
+EPOCHS = 10
 
 # grab the list of images in our dataset directory, then initialize
 # the list of data (i.e., images) and class images
@@ -51,7 +51,10 @@ for imagePath in imagePaths:
 	# resize it to be a fixed 32x32 pixels, ignoring aspect ratio
 	label = imagePath.split(os.path.sep)[-2]
 	image = cv2.imread(imagePath)
-	image = cv2.resize(image, (32, 32))
+	try:
+		image = cv2.resize(image, (32, 32))
+	except:
+		print("Imagem com erro",imagePath)
 
 	# update the data and labels lists, respectively
 	data.append(image)
@@ -106,6 +109,7 @@ f = open(args["le"], "wb")
 f.write(pickle.dumps(le))
 f.close()
 
+print("[INFO] Plotting stats")
 # plot the training loss and accuracy
 plt.style.use("ggplot")
 plt.figure()
