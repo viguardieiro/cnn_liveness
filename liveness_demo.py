@@ -3,6 +3,7 @@
 
 # import the necessary packages
 from imutils.video import VideoStream
+from imutils.video import FileVideoStream
 from keras.preprocessing.image import img_to_array
 from keras.models import load_model
 import numpy as np
@@ -23,6 +24,8 @@ ap.add_argument("-d", "--detector", type=str, required=True,
 	help="path to OpenCV's deep learning face detector")
 ap.add_argument("-c", "--confidence", type=float, default=0.5,
 	help="minimum probability to filter weak detections")
+ap.add_argument("-v", "--video", type=str, 
+	help="minimum probability to filter weak detections")
 args = vars(ap.parse_args())
 
 # load our serialized face detector from disk
@@ -39,7 +42,9 @@ le = pickle.loads(open(args["le"], "rb").read())
 
 # initialize the video stream and allow the camera sensor to warmup
 print("[INFO] starting video stream...")
-vs = VideoStream(src=0).start()
+#vs = VideoStream(src=0).start()
+vs = FileVideoStream(args["video"]).start()
+
 time.sleep(2.0)
 
 # loop over the frames from the video stream
